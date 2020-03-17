@@ -1,0 +1,45 @@
+<pre class="tpl-pre"><code class="tpl-code">
+{
+{{ range .response.data }}
+  {{ range $rootIndex, $rootField := . }}
+    <div>
+      <b>"{{ $rootIndex }}":</b>
+        {{ if isset $rootField -1 }}[{{ range $key, $value := $rootField }}{
+            {{ range $i, $e := . }}
+              <div><b>"{{ $i }}":</b> "{{ $e.content }}",</div>
+              {{ if $e.comment }}<div class="comment">↳ {{ $e.comment | safeHTML }}</div>{{ end }}
+            {{ end }}
+          }, {{ end }}]{{ else if $rootField.content }}
+          {{ .content }},
+          {{ if $rootField.comment }}
+            <div class="comment">↳ {{ $rootField.comment | safeHTML }}</div>
+          {{ end }}
+        {{ else }}{
+          {{ range $index, $element := $rootField }}
+          <div>
+            <b>"{{ $index }}":</b>
+            {{ if isset $element -1 }}[{{ range $key, $value := $element }}{
+              {{ range $i, $e := . }}
+                <div><b>"{{ $i }}":</b> "{{ $e.content }}",</div>
+                {{ if $e.comment }}<div class="comment">↳ {{ $e.comment | safeHTML }}</div>{{ end }}
+              {{ end }}
+            }, {{ end }}]{{ else }}{{ if $element }}
+              {{ if $element.content }}
+                "{{ .content }}",</div>
+                {{ if .comment }}<div class="comment">↳ {{ .comment | safeHTML }}</div>{{ end }}<div>
+              {{ else }}{
+                {{ range $i, $e := . }}
+                  <div><b>"{{ $i }}":</b> "{{ $e.content }}",</div>
+                  {{ if $e.comment }}<div class="comment">↳ {{ $e.comment | safeHTML }}</div>{{ end }}
+                {{ end }}
+              },{{ end }}
+            {{ end }}{{ end }}
+          </div>
+        {{ end }}
+        },
+      {{ end }}
+    </div>
+  {{ end }}
+{{ end }}
+}
+</code></pre>

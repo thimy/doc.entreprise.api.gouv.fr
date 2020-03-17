@@ -1,0 +1,14 @@
+languageCode = "fr-fr"
+title = "doc.entreprise.api.gouv.fr"
+theme = "template.beta.gouv.fr"
+relativeURLs = true
+sectionPagesMenu = "main"
+
+[markup.goldmark.renderer]
+unsafe = true
+
+pluralizelisttitles = false
+
+[markup]
+  [markup.highlight]
+    lineNos = true

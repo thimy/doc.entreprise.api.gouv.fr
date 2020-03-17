@@ -1,0 +1,807 @@
+category = "Informations générales"
+
+[[endpoint]]
+name = "Données de référence"
+scope = [
+  "entreprises",
+  "associations"
+]
+reference = "entreprises"
+description = "Obtenir des informations concernant une personne physique ou morale du répertoire Sirene telles que les dates de création et de fin ; le code effectif, le numéro de TVA intercommunautaire ; la forme juridique... ou encore les mandataires sociaux et l’état administratif de l’entité concernée."
+usecases = [
+  "Aides publiques",
+  "Applications de la loi énergie – Art.64",
+  "Marchés publics",
+  "Répertoire de tiers"
+]
+access = "Restreint par Signup"
+providers = [
+  "insee",
+  "infogreffe"
+]
+new = "Vous pouvez accéder aux entreprises non diffusées en ajoutant le paramètre <code class=\"tpl-code\">non_diffusables: true</code>. Un nouveau champ apparaît dans la réponse, sous la forme : <code class=\"tpl-code\">diffusable_commercialement</code>."
+
+  [endpoint.request]
+  variable = "Le siren de la personne physique ou morale recherchée"
+  baseURL = "https://entreprise.api.gouv.fr/v2     "
+
+    [[endpoint.request.parameters]]
+    name = "/entreprises/"
+    param = "SirenDeL’Entreprise         "
+
+    [[endpoint.request.parameters]]
+    name = "?token="
+    param = "JetonD’Habilitation*         "
+
+    [[endpoint.request.parameters]]
+    name = "&context="
+    param = "CadreDeLaRequête"
+
+    [[endpoint.request.parameters]]
+    name = "&recipient="
+    param = "BénéficaireDeL’Appel"
+
+    [[endpoint.request.parameters]]
+    name = "&object="
+    param = "RaisonDeL’AppelOuIdentifiant"
+
+    [[endpoint.request.options]]
+    label = "pour connaître l’état administratif de l’entité demandée ;"
+    description = "Si vous souhaitez également connaître l’état administratif de l’entreprise, ajoutez le paramètre facultatif suivant :"
+    name = "&with_etat_administratif="
+    param = true
+
+    [[endpoint.request.options]]
+    label = "pour accéder aux entreprises non diffusibles."
+    description = "Si vous souhaitez accéder aux enteprises non diffusibles :"
+    name = "&non_diffusable="
+    param = true
+
+  [endpoint.response]
+  format = "Données structurées JSON"
+  timeout = "5 secondes"
+
+    [[endpoint.response.data]]
+
+      [endpoint.response.data.entreprise]
+      label = "entreprise"
+      description = "qui contient les données générales, les mandataires sociaux et l’état administratif de la personne physique ou morale ;"
+
+        [endpoint.response.data.entreprise.fields]
+
+          [endpoint.response.data.entreprise.fields.siren]
+          value = "000000000"
+
+          [endpoint.response.data.entreprise.fields.capital_social]
+          value = "00000"
+
+          [endpoint.response.data.entreprise.fields.numero_tva_intracommunautaire]
+          value = "FR00000"
+          comment = "Également appelé numéro d’identification fiscale NIF. Ce numéro est calculé par API Entreprise selon la règle officielle, cette donnée est donc théorique. Dans le cas où l’établissement siège est à l’étranger, la valeur renvoit <b>null</b>. En effet dans ce cas le numéro de TVA est problablement calculé par le pays où se situe l'établissement siège et non par la France. La seule source fiable est alors l'entreprise elle-même."
+
+          [endpoint.response.data.entreprise.fields.forme_juridique]
+          value = "Forme juridique"
+
+          [endpoint.response.data.entreprise.fields.forme_juridique_code]
+          value = "0000"
+          comment = "Ces deux champs sont issus de la nomenclature des catégories juridiques de l’INSEE"
+
+          [endpoint.response.data.entreprise.fields.nom_commercial]
+          value = "Mon entreprise"
+
+          [endpoint.response.data.entreprise.fields.procedure_collective]
+          value = "toujours false"
+          comment = "À ignorer, et ce champ sera bientôt supprimé."
+
+          [endpoint.response.data.entreprise.fields.enseigne]
+          value = "null ou quelque chose ?"
+
+          [endpoint.response.data.entreprise.fields.naf_entreprise]
+          value = "6202A"
+
+          [endpoint.response.data.entreprise.fields.libelle_naf_entreprise]
+          value = "Conseil en systèmes et logiciels informatiques"
+          comment = "issu de la nomenclature d’activités française de l’INSEE."
+
+          [endpoint.response.data.entreprise.fields.raison_sociale]
+          value = "mon entreprise"
+
+          [endpoint.response.data.entreprise.fields.siret_siege_social]
+          value = "00000000000000"
+
+          [endpoint.response.data.entreprise.fields.code_effectif_entreprise]
+          value = "31"
+
+          [endpoint.response.data.entreprise.fields.date_creation]
+          value = "000000000"
+          comment = "date au format timestamp UNIX"
+
+          [endpoint.response.data.entreprise.fields.nom]
+          value = "null ou quelque chose ?"
+
+          [endpoint.response.data.entreprise.fields.prenom]
+          value = "null ou quelque chose ?"
+
+          [endpoint.response.data.entreprise.fields.date_radiation]
+          value = "000000000"
+          comment = "indique null si l’entreprise            n’est pas radiée du registre / Dans le cas contraire, la date est fournie au format timestamp UNIX"
+
+          [endpoint.response.data.entreprise.fields.categorie_entreprise]
+          value = "PME ou TPE ou ETI"
+
+          [endpoint.response.data.entreprise.fields.tranche_effectif_salarie_entreprise]
+
+            [endpoint.response.data.entreprise.fields.tranche_effectif_salarie_entreprise.de]
+            value = "200"
+
+            [endpoint.response.data.entreprise.fields.tranche_effectif_salarie_entreprise.a]
+            value = "249"
+
+            [endpoint.response.data.entreprise.fields.tranche_effectif_salarie_entreprise.code]
+            value = "31"
+
+            [endpoint.response.data.entreprise.fields.tranche_effectif_salarie_entreprise.date_reference]
+            value = "2014"
+
+            [endpoint.response.data.entreprise.fields.tranche_effectif_salarie_entreprise.intitule]
+            value = "200 à 249 salariés"
+            comment = "ces derniers champs correspondent à la nomenclature INSEE"
+
+          [endpoint.response.data.entreprise.fields.etat_administratif]
+
+            [endpoint.response.data.entreprise.fields.etat_administratif.value]
+            value = "F"
+            comment = "A (actif) ou F (fermé)"
+
+            [endpoint.response.data.entreprise.fields.etat_administratif.etat_administratif]
+            value = 1315173600.0
+            comment = "null quand actif (A), un timestamp (un entier) quand fermé (F)"
+
+          [endpoint.response.data.entreprise.fields.diffusable_commercialement]
+          value = "true"
+          comment = "champ uniquement présent avec l'option \"non_diffusables=true\""
+
+          [[endpoint.response.data.entreprise.fields.mandataires_sociaux]]
+
+            [endpoint.response.data.entreprise.fields.mandataires_sociaux.nom]
+            value = "Henri"
+
+            [endpoint.response.data.entreprise.fields.mandataires_sociaux.prenom]
+            value = "Martin"
+
+            [endpoint.response.data.entreprise.fields.mandataires_sociaux.fonction]
+            value = "Président du Directoire"
+
+            [endpoint.response.data.entreprise.fields.mandataires_sociaux.dirigeant]
+            value = "toujours true"
+
+            [endpoint.response.data.entreprise.fields.mandataires_sociaux.date_naissance]
+            value = "1965-01-27"
+
+            [endpoint.response.data.entreprise.fields.mandataires_sociaux.date_naissance_timestamp]
+            value = -155523600.0
+
+            [endpoint.response.data.entreprise.fields.mandataires_sociaux.raison_sociale]
+            value = ""
+
+            [endpoint.response.data.entreprise.fields.mandataires_sociaux.identifiant]
+            value = ""
+
+            [endpoint.response.data.entreprise.fields.mandataires_sociaux.type]
+            value = "PP"
+
+          [[endpoint.response.data.entreprise.fields.mandataires_sociaux]]
+
+            [endpoint.response.data.entreprise.fields.mandataires_sociaux.nom]
+            value = ""
+
+            [endpoint.response.data.entreprise.fields.mandataires_sociaux.prenom]
+            value = ""
+
+            [endpoint.response.data.entreprise.fields.mandataires_sociaux.fonction]
+            value = "COMMISSAIRE AUX COMPTES SUPPLEANT"
+
+            [endpoint.response.data.entreprise.fields.mandataires_sociaux.dirigeant]
+            value = true
+
+            [endpoint.response.data.entreprise.fields.mandataires_sociaux.date_naissance]
+            value = ""
+
+            [endpoint.response.data.entreprise.fields.mandataires_sociaux.date_naissance_timestamp]
+            value = 0.0
+
+            [endpoint.response.data.entreprise.fields.mandataires_sociaux.raison_sociale]
+            value = "BCRH & ASSOCIES - SOCIETE A RESPONSABILITE LIMITEE A ASSOCIE UNIQUE"
+
+            [endpoint.response.data.entreprise.fields.mandataires_sociaux.identifiant]
+            value = "490092574"
+
+            [endpoint.response.data.entreprise.fields.mandataires_sociaux.type]
+            value = "PM"
+
+    [[endpoint.response.data]]
+
+      [endpoint.response.data.etablissement_siege]
+      label = "établissement siège"
+      description = "qui contient les données du siège, celles-ci étant disponibles également par l’<em>endpoint</em> <code class=\"tpl-code\">etablissements</code> ;"
+
+        [endpoint.response.data.etablissement_siege.fields]
+
+          [endpoint.response.data.etablissement_siege.fields.siege_social]
+          value = true
+
+          [endpoint.response.data.etablissement_siege.fields.siret]
+          value = "41816609600051"
+
+          [endpoint.response.data.etablissement_siege.fields.naf]
+          value = "6202A"
+
+          [endpoint.response.data.etablissement_siege.fields.libelle_naf]
+          value = "Conseil en systèmes et logiciels informatiques"
+
+          [endpoint.response.data.etablissement_siege.fields.date_mise_a_jour]
+          value = 1449183600.0
+
+          [endpoint.response.data.etablissement_siege.fields.tranche_effectif_salarie_etablissement]
+
+            [endpoint.response.data.etablissement_siege.fields.tranche_effectif_salarie_etablissement.de]
+            value = 200.0
+
+            [endpoint.response.data.etablissement_siege.fields.tranche_effectif_salarie_etablissement.a]
+            value = 249.0
+
+            [endpoint.response.data.etablissement_siege.fields.tranche_effectif_salarie_etablissement.code]
+            value = "31"
+
+            [endpoint.response.data.etablissement_siege.fields.tranche_effectif_salarie_etablissement.date_reference]
+            value = "2014"
+
+            [endpoint.response.data.etablissement_siege.fields.tranche_effectif_salarie_etablissement.intitule]
+            value = "200 à 249 salariés"
+
+          [endpoint.response.data.etablissement_siege.fields.date_creation_etablissement]
+          value = 1108594800.0
+
+          [endpoint.response.data.etablissement_siege.fields.enseigne]
+          value = "null"
+
+          [endpoint.response.data.etablissement_siege.fields.region_implantation]
+
+            [endpoint.response.data.etablissement_siege.fields.region_implantation.code]
+            value = "11"
+
+            [endpoint.response.data.etablissement_siege.fields.region_implantation.value]
+            value = "Île-de-France"
+
+          [endpoint.response.data.etablissement_siege.fields.commune_implantation]
+
+            [endpoint.response.data.etablissement_siege.fields.commune_implantation.code]
+            value = "75108"
+
+            [endpoint.response.data.etablissement_siege.fields.commune_implantation.value]
+            value = "PARIS 8"
+
+          [endpoint.response.data.etablissement_siege.fields.pays_implantation]
+
+            [endpoint.response.data.etablissement_siege.fields.pays_implantation.code]
+            value = "null"
+
+            [endpoint.response.data.etablissement_siege.fields.pays_implantation.value]
+            value = "null"
+
+          [endpoint.response.data.etablissement_siege.fields.diffusable_commercialement]
+          value = true
+
+          [endpoint.response.data.etablissement_siege.fields.adresse]
+
+            [endpoint.response.data.etablissement_siege.fields.adresse.l1]
+            value = "OCTO TECHNOLOGY"
+
+            [endpoint.response.data.etablissement_siege.fields.adresse.l2]
+            value = "null"
+
+            [endpoint.response.data.etablissement_siege.fields.adresse.l3]
+            value = "null"
+
+            [endpoint.response.data.etablissement_siege.fields.adresse.l4]
+            value = "50 AVENUE DES CHAMPS ELYSEES"
+
+            [endpoint.response.data.etablissement_siege.fields.adresse.l5]
+            value = "null"
+
+            [endpoint.response.data.etablissement_siege.fields.adresse.l6]
+            value = "75008 PARIS"
+
+            [endpoint.response.data.etablissement_siege.fields.adresse.l7]
+            value = "FRANCE"
+
+            [endpoint.response.data.etablissement_siege.fields.adresse.numero_voie]
+            value = "50"
+
+            [endpoint.response.data.etablissement_siege.fields.adresse.type_voie]
+            value = "AV"
+
+            [endpoint.response.data.etablissement_siege.fields.adresse.nom_voie]
+            value = "DES CHAMPS ELYSEES"
+
+            [endpoint.response.data.etablissement_siege.fields.adresse.complement_adresse]
+            value = "null"
+
+            [endpoint.response.data.etablissement_siege.fields.adresse.code_postal]
+            value = "75008"
+
+            [endpoint.response.data.etablissement_siege.fields.adresse.localite]
+            value = "PARIS 8"
+
+            [endpoint.response.data.etablissement_siege.fields.adresse.code_insee_localite]
+            value = "75108"
+
+            [endpoint.response.data.etablissement_siege.fields.adresse.cedex]
+            value = "null"
+
+          [endpoint.response.data.etablissement_siege.fields.etat_administratif]
+
+            [endpoint.response.data.etablissement_siege.fields.etat_administratif.value]
+            value = "F"
+            comment = "A (actif) ou F (fermé)"
+
+            [endpoint.response.data.etablissement_siege.fields.etat_administratif.date_cessation]
+            value = 1315173600.0
+            comment = "null quand actif (A), un timestamp (un entier) quand fermé (F)"
+
+    [[endpoint.response.data]]
+
+      [endpoint.response.data.gateway_error]
+      label = "gateway error"
+      description = "indiquant si un fournisseur de données n’a pas fonctionné."
+      value = false
+
+  [endpoint.availability]
+  status = "OK"
+  volumetrics = "limitation API Entreprise    (2000 requêtes/10minutes/IP)"
+  usual_availability = "24h/24 et 7j/7"
+  unavailability_types = "régulières, courtes, nocturnes"
+  last_month_unavailabilities = "15 minutes"
+
+  [[endpoint.perimeter]]
+  label = "Entreprises"
+  description = "Inter has ruinarum varietates a Nisibi quam tuebatur accitus Vrsicinus, cui nos obsecuturos iunxerat imperiale praeceptum, dispicere litis exitialis certamina cogebatur abnuens et reclamans, adulatorum oblatrantibus turmis, bellicosus sane"
+
+  [[endpoint.perimeter]]
+  label = "Certaines associations"
+  description = "milesque semper et militum ductor sed forensibus iurgiis longe discretus, qui metu sui discriminis anxius cum accusatores quaesitoresque subditivos sibi consociatos ex isdem foveis cerneret emergentes"
+
+  [[endpoint.perimeter]]
+  label = "Certaines personnes physiques inscrites au répertoire Sirène"
+  description = "quae clam palamve agitabantur, occultis Constantium litteris edocebat inplorans subsidia, quorum metu tumor notissimus Caesaris exhalaret."
+
+[[endpoint]]
+name = "Données de référence d’un établissement"
+scope = [
+  "entreprises",
+  "associations"
+]
+reference = "etablissements"
+description = "<description>"
+usecases = [
+  "Aides publiques",
+  "Applications de la loi énergie – Art.64",
+  "Marchés publics",
+  "Répertoire de tiers"
+]
+access = "Restreint par Signup"
+providers = [
+  "insee",
+  "infogreffe"
+]
+new = "Vous pouvez accéder aux entreprises non diffusées en ajoutant le paramètre <code class=\"tpl-code\">non_diffusables: true</code>. Un nouveau champ apparaît dans la réponse, sous la forme : <code class=\"tpl-code\">diffusable_commercialement</code>."
+
+  [endpoint.request]
+  variable = "Le siren de la personne physique ou morale recherchée"
+  baseURL = "https://entreprise.api.gouv.fr/v2   "
+
+    [[endpoint.request.parameters]]
+    name = "/etablissements/"
+    param = "SirenDeL’Entreprise     "
+
+    [[endpoint.request.parameters]]
+    name = "?token="
+    param = "JetonD’Habilitation*     "
+
+    [[endpoint.request.parameters]]
+    name = "&context="
+    param = "CadreDeLaRequête"
+
+    [[endpoint.request.parameters]]
+    name = "&recipient="
+    param = "BénéficaireDeL’Appel"
+
+    [[endpoint.request.parameters]]
+    name = "&object="
+    param = "RaisonDeL’AppelOuIdentifiant"
+
+    [[endpoint.request.options]]
+    label = "pour accéder aux entreprises non diffusibles."
+    description = "Si vous souhaitez accéder aux enteprises non diffusibles :"
+    name = "&non_diffusable="
+    param = true
+
+  [endpoint.response]
+  format = "Données structurées JSON"
+  timeout = "5 secondes"
+
+    [[endpoint.response.data]]
+
+      [endpoint.response.data.etablissement]
+      label = "établissements"
+      description = "qui contient les données générales, les mandataires sociaux et l’état administratif de la personne physique ou morale ;"
+
+        [endpoint.response.data.etablissement.fields]
+
+          [endpoint.response.data.etablissement.fields.siege_social]
+          value = true
+
+          [endpoint.response.data.etablissement.fields.siret]
+          value = "41816609600051"
+
+          [endpoint.response.data.etablissement.fields.naf]
+          value = "6202A"
+
+          [endpoint.response.data.etablissement.fields.libelle_naf]
+          value = "Conseil en systèmes et logiciels informatiques"
+
+          [endpoint.response.data.etablissement.fields.date_mise_a_jour]
+          value = 1449183600.0
+
+          [endpoint.response.data.etablissement.fields.tranche_effectif_salarie_entreprise]
+
+            [endpoint.response.data.etablissement.fields.tranche_effectif_salarie_entreprise.de]
+            value = "200"
+
+            [endpoint.response.data.etablissement.fields.tranche_effectif_salarie_entreprise.a]
+            value = "249"
+
+            [endpoint.response.data.etablissement.fields.tranche_effectif_salarie_entreprise.code]
+            value = "31"
+
+            [endpoint.response.data.etablissement.fields.tranche_effectif_salarie_entreprise.date_reference]
+            value = "2014"
+
+            [endpoint.response.data.etablissement.fields.tranche_effectif_salarie_entreprise.intitule]
+            value = "200 à 249 salariés"
+            comment = "ces derniers champs correspondent à la nomenclature INSEE"
+
+          [endpoint.response.data.etablissement.fields.date_creation_etablissement]
+          value = 1108594800.0
+
+          [endpoint.response.data.etablissement.fields.enseigne]
+          value = "null"
+
+          [endpoint.response.data.etablissement.fields.region_implantation]
+
+            [endpoint.response.data.etablissement.fields.region_implantation.code]
+            value = "11"
+
+            [endpoint.response.data.etablissement.fields.region_implantation.value]
+            value = "Île-de-France"
+
+          [endpoint.response.data.etablissement.fields.commune_implantation]
+
+            [endpoint.response.data.etablissement.fields.commune_implantation.code]
+            value = "75108"
+
+            [endpoint.response.data.etablissement.fields.commune_implantation.value]
+            value = "PARIS 8"
+
+          [endpoint.response.data.etablissement.fields.pays_implantation]
+
+            [endpoint.response.data.etablissement.fields.pays_implantation.code]
+            value = "null"
+
+            [endpoint.response.data.etablissement.fields.pays_implantation.value]
+            value = "null"
+
+          [endpoint.response.data.etablissement.fields.diffusable_commercialement]
+          value = "null"
+
+          [endpoint.response.data.etablissement.fields.adresse]
+
+            [endpoint.response.data.etablissement.fields.adresse.l1]
+            value = "OCTO TECHNOLOGY"
+
+            [endpoint.response.data.etablissement.fields.adresse.l2]
+            value = "null"
+
+            [endpoint.response.data.etablissement.fields.adresse.l3]
+            value = "null"
+
+            [endpoint.response.data.etablissement.fields.adresse.l4]
+            value = "50 AVENUE DES CHAMPS ELYSEES"
+
+            [endpoint.response.data.etablissement.fields.adresse.l5]
+            value = "null"
+
+            [endpoint.response.data.etablissement.fields.adresse.l6]
+            value = "75008 PARIS"
+
+            [endpoint.response.data.etablissement.fields.adresse.l7]
+            value = "FRANCE"
+
+            [endpoint.response.data.etablissement.fields.adresse.numero_voie]
+            value = "50"
+
+            [endpoint.response.data.etablissement.fields.adresse.type_voie]
+            value = "AV"
+
+            [endpoint.response.data.etablissement.fields.adresse.nom_voie]
+            value = "DES CHAMPS ELYSEES"
+
+            [endpoint.response.data.etablissement.fields.adresse.complement_adresse]
+            value = "null"
+
+            [endpoint.response.data.etablissement.fields.adresse.code_postal]
+            value = "75008"
+
+            [endpoint.response.data.etablissement.fields.adresse.localite]
+            value = "PARIS 8"
+
+            [endpoint.response.data.etablissement.fields.adresse.code_insee_localite]
+            value = "75108"
+
+            [endpoint.response.data.etablissement.fields.adresse.cedex]
+            value = "null"
+
+          [endpoint.response.data.etablissement.fields.etat_administratif]
+
+            [endpoint.response.data.etablissement.fields.etat_administratif.value]
+            value = "F"
+            comment = "A (actif) ou F (fermé)"
+
+            [endpoint.response.data.etablissement.fields.etat_administratif.date_fermeture]
+            value = 1315173600.0
+            comment = "null quand actif (A), un timestamp (un entier) quand fermé (F)"
+
+    [[endpoint.response.data]]
+
+      [endpoint.response.data.gateway_error]
+      label = "gateway error"
+      description = "indiquant si un fournisseur de données n’a pas fonctionné."
+      value = false
+
+  [endpoint.availability]
+  status = "OK"
+  volumetrics = "limitation API Entreprise    (2000 requêtes/10minutes/IP)"
+  usual_availability = "24h/24 et 7j/7"
+  unavailability_types = "régulières, courtes, nocturnes"
+  last_month_unavailabilities = "15 minutes"
+
+  [[endpoint.perimeter]]
+  label = "Entreprises"
+  description = "Inter has ruinarum varietates a Nisibi quam tuebatur accitus Vrsicinus, cui nos obsecuturos iunxerat imperiale praeceptum, dispicere litis exitialis certamina cogebatur abnuens et reclamans, adulatorum oblatrantibus turmis, bellicosus sane"
+
+  [[endpoint.perimeter]]
+  label = "Certaines associations"
+  description = "milesque semper et militum ductor sed forensibus iurgiis longe discretus, qui metu sui discriminis anxius cum accusatores quaesitoresque subditivos sibi consociatos ex isdem foveis cerneret emergentes"
+
+  [[endpoint.perimeter]]
+  label = "Certaines personnes physiques inscrites au répertoire Sirène"
+  description = "quae clam palamve agitabantur, occultis Constantium litteris edocebat inplorans subsidia, quorum metu tumor notissimus Caesaris exhalaret."
+
+[[endpoint]]
+name = "Extrait RCS"
+scope = [
+  "entreprises",
+  "associations"
+]
+reference = "etablissements"
+description = "<description>"
+usecases = [
+  "Aides publiques",
+  "Applications de la loi énergie – Art.64",
+  "Marchés publics",
+  "Répertoire de tiers"
+]
+access = "Restreint par Signup"
+providers = [
+  "insee",
+  "infogreffe"
+]
+new = "Vous pouvez accéder aux entreprises non diffusées en ajoutant le paramètre <code class=\"tpl-code\">non_diffusables: true</code>. Un nouveau champ apparaît dans la réponse, sous la forme : <code class=\"tpl-code\">diffusable_commercialement</code>."
+
+  [endpoint.request]
+  variable = "Le siren de la personne physique ou morale recherchée"
+  baseURL = "https://entreprise.api.gouv.fr/v2   "
+
+    [[endpoint.request.parameters]]
+    name = "/extraits_rcs_infogreffe/"
+    param = "SirenDeL’Entreprise     "
+
+    [[endpoint.request.parameters]]
+    name = "?token="
+    param = "JetonD’Habilitation*     "
+
+    [[endpoint.request.parameters]]
+    name = "&context="
+    param = "CadreDeLaRequête"
+
+    [[endpoint.request.parameters]]
+    name = "&recipient="
+    param = "BénéficaireDeL’Appel"
+
+    [[endpoint.request.parameters]]
+    name = "&object="
+    param = "RaisonDeL’AppelOuIdentifiant"
+
+  [endpoint.response]
+  format = "Données structurées JSON"
+  timeout = "5 secondes"
+
+    [[endpoint.response.data]]
+
+      [endpoint.response.data.fields]
+
+        [endpoint.response.data.fields.siren]
+        value = "418166096"
+
+        [endpoint.response.data.fields.date_immatriculation]
+        value = "1998-03-27"
+
+        [endpoint.response.data.fields.date_immatriculation_timestamp]
+        value = 890953200.0
+
+        [endpoint.response.data.fields.date_extrait]
+        value = "21 AVRIL 2017"
+
+        [[endpoint.response.data.fields.observations]]
+
+          [endpoint.response.data.fields.observations.date]
+          value = "2000-02-23"
+
+          [endpoint.response.data.fields.observations.date_timestamp]
+          value = 951260400.0
+
+          [endpoint.response.data.fields.observations.numero]
+          value = "12197"
+
+          [endpoint.response.data.fields.observations.libelle]
+          value = "LA SOCIETE NE CONSERVE AUCUNE ACTIVITE A SON ANCIEN SIEGE"
+
+        [[endpoint.response.data.fields.observations]]
+
+          [endpoint.response.data.fields.observations.date]
+          value = "2017-07-19"
+
+          [endpoint.response.data.fields.observations.date_timestamp]
+          value = 951260400.0
+
+          [endpoint.response.data.fields.observations.numero]
+          value = "14127"
+
+          [endpoint.response.data.fields.observations.libelle]
+          value = "AUGMENTATION DE CAPITAL"
+
+  [endpoint.availability]
+  status = "OK"
+  volumetrics = "limitation API Entreprise    (2000 requêtes/10minutes/IP)"
+  usual_availability = "24h/24 et 7j/7"
+  unavailability_types = "régulières, courtes, nocturnes"
+  last_month_unavailabilities = "15 minutes"
+
+  [[endpoint.perimeter]]
+  label = "Entreprises"
+  description = "Inter has ruinarum varietates a Nisibi quam tuebatur accitus Vrsicinus, cui nos obsecuturos iunxerat imperiale praeceptum, dispicere litis exitialis certamina cogebatur abnuens et reclamans, adulatorum oblatrantibus turmis, bellicosus sane"
+
+  [[endpoint.perimeter]]
+  label = "Certaines associations"
+  description = "milesque semper et militum ductor sed forensibus iurgiis longe discretus, qui metu sui discriminis anxius cum accusatores quaesitoresque subditivos sibi consociatos ex isdem foveis cerneret emergentes"
+
+  [[endpoint.perimeter]]
+  label = "Certaines personnes physiques inscrites au répertoire Sirène"
+  description = "quae clam palamve agitabantur, occultis Constantium litteris edocebat inplorans subsidia, quorum metu tumor notissimus Caesaris exhalaret."
+
+[[endpoint]]
+name = "Exercices"
+scope = [
+  "entreprises",
+  "associations"
+]
+reference = "etablissements"
+description = "<description>"
+usecases = [
+  "Aides publiques",
+  "Applications de la loi énergie – Art.64",
+  "Marchés publics",
+  "Répertoire de tiers"
+]
+access = "Restreint par Signup"
+providers = [
+  "insee",
+  "infogreffe"
+]
+new = "Vous pouvez accéder aux entreprises non diffusées en ajoutant le paramètre <code class=\"tpl-code\">non_diffusables: true</code>. Un nouveau champ apparaît dans la réponse, sous la forme : <code class=\"tpl-code\">diffusable_commercialement</code>."
+
+  [endpoint.request]
+  variable = "Le siren de la personne physique ou morale recherchée"
+  baseURL = "https://entreprise.api.gouv.fr/v2   "
+
+    [[endpoint.request.parameters]]
+    name = "/extraits_rcs_infogreffe/"
+    param = "SirenDeL’Entreprise     "
+
+    [[endpoint.request.parameters]]
+    name = "?token="
+    param = "JetonD’Habilitation*     "
+
+    [[endpoint.request.parameters]]
+    name = "&context="
+    param = "CadreDeLaRequête"
+
+    [[endpoint.request.parameters]]
+    name = "&recipient="
+    param = "BénéficaireDeL’Appel"
+
+    [[endpoint.request.parameters]]
+    name = "&object="
+    param = "RaisonDeL’AppelOuIdentifiant"
+
+  [endpoint.response]
+  format = "Données structurées JSON"
+  timeout = "5 secondes"
+
+    [[endpoint.response.data]]
+
+      [endpoint.response.data.exercices]
+      label = "exercices"
+      description = "Celui porté sur la liasse fiscale qui correspond au chiffre d'affaire comptable."
+
+        [[endpoint.response.data.exercices.fields]]
+
+          [endpoint.response.data.exercices.fields.ca]
+          value = "648374448"
+
+          [endpoint.response.data.exercices.fields.date_fin_exercice]
+          value = "2016-12-31T00:00:00+01:00"
+
+          [endpoint.response.data.exercices.fields.date_fin_exercice_timestamp]
+          value = 1483138800.0
+
+        [[endpoint.response.data.exercices.fields]]
+
+          [endpoint.response.data.exercices.fields.ca]
+          value = "491463386"
+
+          [endpoint.response.data.exercices.fields.date_fin_exercice]
+          value = "2015-12-31T00:00:00+01:00"
+
+          [endpoint.response.data.exercices.fields.date_fin_exercice_timestamp]
+          value = 1451516400.0
+
+        [[endpoint.response.data.exercices.fields]]
+
+          [endpoint.response.data.exercices.fields.ca]
+          value = "1451516400"
+
+          [endpoint.response.data.exercices.fields.date_fin_exercice]
+          value = "2014-12-31T00:00:00+01:00"
+
+          [endpoint.response.data.exercices.fields.date_fin_exercice_timestamp]
+          value = 1419980400.0
+
+  [endpoint.availability]
+  status = "OK"
+  volumetrics = "limitation API Entreprise    (2000 requêtes/10minutes/IP)"
+  usual_availability = "24h/24 et 7j/7"
+  unavailability_types = "régulières, courtes, nocturnes"
+  last_month_unavailabilities = "15 minutes"
+
+  [[endpoint.perimeter]]
+  label = "Entreprises"
+  description = "Inter has ruinarum varietates a Nisibi quam tuebatur accitus Vrsicinus, cui nos obsecuturos iunxerat imperiale praeceptum, dispicere litis exitialis certamina cogebatur abnuens et reclamans, adulatorum oblatrantibus turmis, bellicosus sane"
+
+  [[endpoint.perimeter]]
+  label = "Certaines associations"
+  description = "milesque semper et militum ductor sed forensibus iurgiis longe discretus, qui metu sui discriminis anxius cum accusatores quaesitoresque subditivos sibi consociatos ex isdem foveis cerneret emergentes"
+
+  [[endpoint.perimeter]]
+  label = "Certaines personnes physiques inscrites au répertoire Sirène"
+  description = "quae clam palamve agitabantur, occultis Constantium litteris edocebat inplorans subsidia, quorum metu tumor notissimus Caesaris exhalaret."

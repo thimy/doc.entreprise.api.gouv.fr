@@ -1,0 +1,812 @@
+{
+  "category": "Informations générales",
+  "endpoint": [
+    {
+      "name": "Données de référence",
+      "scope": [
+        "entreprises",
+        "associations"
+      ],
+      "reference": "entreprises",
+      "description": "Obtenir des informations concernant une personne physique ou morale du répertoire Sirene telles que les dates de création et de fin ; le code effectif, le numéro de TVA intercommunautaire ; la forme juridique... ou encore les mandataires sociaux et l’état administratif de l’entité concernée.",
+      "usecases": [
+        "Aides publiques",
+        "Applications de la loi énergie – Art.64",
+        "Marchés publics",
+        "Répertoire de tiers"
+      ],
+      "access": "Restreint par Signup",
+      "providers": [
+        "insee",
+        "infogreffe"
+      ],
+      "new": "Vous pouvez accéder aux entreprises non diffusées en ajoutant le paramètre <code class=\"tpl-code\">non_diffusables: true</code>. Un nouveau champ apparaît dans la réponse, sous la forme : <code class=\"tpl-code\">diffusable_commercialement</code>.",
+      "perimeter": [
+        {
+          "label": "Entreprises",
+          "description": "Inter has ruinarum varietates a Nisibi quam tuebatur accitus Vrsicinus, cui nos obsecuturos iunxerat imperiale praeceptum, dispicere litis exitialis certamina cogebatur abnuens et reclamans, adulatorum oblatrantibus turmis, bellicosus sane"
+        },
+        {
+          "label": "Certaines associations",
+          "description": "milesque semper et militum ductor sed forensibus iurgiis longe discretus, qui metu sui discriminis anxius cum accusatores quaesitoresque subditivos sibi consociatos ex isdem foveis cerneret emergentes"
+        },
+        {
+          "label": "Certaines personnes physiques inscrites au répertoire Sirène",
+          "description": "quae clam palamve agitabantur, occultis Constantium litteris edocebat inplorans subsidia, quorum metu tumor notissimus Caesaris exhalaret."
+        }
+      ],
+      "request": {
+        "variable": "Le siren de la personne physique ou morale recherchée",
+        "baseURL": "https://entreprise.api.gouv.fr/v2   ",
+        "parameters": [
+          {
+            "name": "/entreprises/",
+            "param": "SirenDeL’Entreprise     "
+          },
+          {
+            "name": "?token=",
+            "param": "JetonD’Habilitation*     "
+          },
+          {
+            "name": "&context=",
+            "param": "CadreDeLaRequête"
+          },
+          {
+            "name": "&recipient=",
+            "param": "BénéficaireDeL’Appel"
+          },
+          {
+            "name": "&object=",
+            "param": "RaisonDeL’AppelOuIdentifiant"
+          }
+        ],
+        "options": [
+          {
+            "label": "pour connaître l’état administratif de l’entité demandée ;",
+            "description": "Si vous souhaitez également connaître l’état administratif de l’entreprise, ajoutez le paramètre facultatif suivant :",
+            "name": "&with_etat_administratif=",
+            "param": true
+          },
+          {
+            "label": "pour accéder aux entreprises non diffusibles.",
+            "description": "Si vous souhaitez accéder aux enteprises non diffusibles :",
+            "name": "&non_diffusable=",
+            "param": true
+          }
+        ]
+      },
+      "response": {
+        "format": "Données structurées JSON",
+        "timeout": "5 secondes",
+        "data": [{
+          "entreprise": {
+              "siren": {
+                "content": "000000000"
+              },
+              "capital_social": {
+                "content": "00000"
+              },
+              "numero_tva_intracommunautaire": {
+                "content": "FR00000",
+                "comment": "Également appelé numéro d’identification fiscale NIF. Ce numéro est calculé par API Entreprise selon la règle officielle, cette donnée est donc théorique. Dans le cas où l’établissement siège est à l’étranger, la valeur renvoit <b>null</b>. En effet dans ce cas le numéro de TVA est problablement calculé par le pays où se situe l'établissement siège et non par la France. La seule source fiable est alors l'entreprise elle-même."
+              },
+              "forme_juridique": {
+                "content": "Forme juridique"
+              },
+              "forme_juridique_code": {
+                "content": "0000",
+                "comment": "Ces deux champs sont issus de la nomenclature des catégories juridiques de l’INSEE"
+              },
+              "nom_commercial": {
+                "content": "Mon entreprise"
+              },
+              "procedure_collective": {
+                "content": "toujours false",
+                "comment": "À ignorer, et ce champ sera bientôt supprimé."
+              },
+              "enseigne": {
+                "content": "null ou quelque chose ?"
+              },
+              "naf_entreprise": {
+                "content": "6202A"
+              },
+              "libelle_naf_entreprise": {
+                "content": "Conseil en systèmes et logiciels informatiques",
+                "comment": "issu de la nomenclature d’activités française de l’INSEE."
+              },
+              "raison_sociale": {
+                "content": "mon entreprise"
+              },
+              "siret_siege_social": {
+                "content": "00000000000000"
+              },
+              "code_effectif_entreprise": {
+                "content": "31"
+              },
+              "date_creation": {
+                "content": "000000000",
+                "comment": "date au format timestamp UNIX"
+              },
+              "nom": {
+                "content": "null ou quelque chose ?"
+              },
+              "prenom": {
+                "content": "null ou quelque chose ?"
+              },
+              "date_radiation": {
+                "content": "000000000",
+                "comment": "indique null si l’entreprise  n’est pas radiée du registre / Dans le cas contraire, la date est fournie au format timestamp UNIX"
+              },
+              "categorie_entreprise": {
+                "content": "PME ou TPE ou ETI"
+              },
+              "tranche_effectif_salarie_entreprise": {
+                "de": {
+                  "content": "200"
+                },
+                "a": {
+                  "content": "249"
+                },
+                "code": {
+                  "content": "31"
+                },
+                "date_reference": {
+                  "content": "2014"
+                },
+                "intitule": {
+                  "content": "200 à 249 salariés",
+                  "comment": "ces derniers champs correspondent à la nomenclature INSEE"
+                }
+              },
+              "mandataires_sociaux": [
+                {
+                  "nom": {
+                    "content": "Henri"
+                  },
+                  "prenom": {
+                    "content": "Martin"
+                  },
+                  "fonction": {
+                    "content": "Président du Directoire"
+                  },
+                  "dirigeant": {
+                    "content": "toujours true"
+                  },
+                  "date_naissance": {
+                    "content": "1965-01-27"
+                  },
+                  "date_naissance_timestamp": {
+                    "content": -155523600
+                  },
+                  "raison_sociale": {
+                    "content": ""
+                  },
+                  "identifiant": {
+                    "content": ""
+                  },
+                  "type": {
+                    "content": "PP"
+                  }
+                },
+                {
+                  "nom": {
+                    "content": ""
+                  },
+                  "prenom": {
+                    "content": ""
+                  },
+                  "fonction": {
+                    "content": "COMMISSAIRE AUX COMPTES SUPPLEANT"
+                  },
+                  "dirigeant": {
+                    "content": true
+                  },
+                  "date_naissance": {
+                    "content": ""
+                  },
+                  "date_naissance_timestamp": {
+                    "content": 0
+                  },
+                  "raison_sociale": {
+                    "content": "BCRH & ASSOCIES - SOCIETE A RESPONSABILITE LIMITEE A ASSOCIE UNIQUE"
+                  },
+                  "identifiant": {
+                    "content": "490092574"
+                  },
+                  "type": {
+                    "content": "PM"
+                  }
+                }
+              ],
+              "etat_administratif": {
+                "value": {
+                  "content": "F",
+                  "comment": "A (actif) ou F (fermé)"
+                },
+                "date_cessation": {
+                  "content": 1315173600,
+                  "comment": "null quand actif (A), un timestamp (un entier) quand fermé (F)"
+                }
+              },
+              "diffusable_commercialement": {
+                "content": "true",
+                "comment": "champ uniquement présent avec l'option \"non_diffusables=true\""
+              }
+            }
+          }, {
+          "etablissement_siege": {
+            "siege_social": {
+              "content": true
+            },
+            "siret": {
+              "content": "41816609600051"
+            },
+            "naf": {
+              "content": "6202A"
+            },
+            "libelle_naf": {
+              "content": "Conseil en systèmes et logiciels informatiques"
+            },
+            "date_mise_a_jour": {
+              "content": 1449183600
+            },
+            "tranche_effectif_salarie_etablissement": {
+              "de": {
+                "content": 200
+              },
+              "a": {
+                "content": 249
+              },
+              "code": {
+                "content": "31"
+              },
+              "date_reference": {
+                "content": "2014"
+              },
+              "intitule": {
+                "content": "200 à 249 salariés"
+              }
+            },
+            "date_creation_etablissement": {
+              "content": 1108594800
+            },
+            "enseigne": {
+              "content": "null"
+            },
+            "region_implantation": {
+              "code": {
+                "content": "11"
+              },
+              "value": {
+                "content": "Île-de-France"
+              }
+            },
+            "commune_implantation": {
+              "code": {
+                "content": "75108"
+              },
+              "value": {
+                "content": "PARIS 8"
+              }
+            },
+            "pays_implantation": {
+              "code": {
+                "content": "null"
+              },
+              "value": {
+                "content": "null"
+              }
+            },
+            "diffusable_commercialement": {
+              "content": true
+            },
+            "adresse": {
+              "l1": {
+                "content": "OCTO TECHNOLOGY"
+              },
+              "l2": {
+                "content": "null"
+              },
+              "l3": {
+                "content": "null"
+              },
+              "l4": {
+                "content": "50 AVENUE DES CHAMPS ELYSEES"
+              },
+              "l5": {
+                "content": "null"
+              },
+              "l6": {
+                "content": "75008 PARIS"
+              },
+              "l7": {
+                "content": "FRANCE"
+              },
+              "numero_voie": {
+                "content": "50"
+              },
+              "type_voie": {
+                "content": "AV"
+              },
+              "nom_voie": {
+                "content": "DES CHAMPS ELYSEES"
+              },
+              "complement_adresse": {
+                "content": "null"
+              },
+              "code_postal": {
+                "content": "75008"
+              },
+              "localite": {
+                "content": "PARIS 8"
+              },
+              "code_insee_localite": {
+                "content": "75108"
+              },
+              "cedex": {
+                "content": "null"
+              }
+            },
+            "etat_administratif": {
+              "value": {
+                "content": "F",
+                "comment": "A (actif) ou F (fermé)"
+              },
+              "date_cessation": {
+                "content": 1315173600,
+                "comment": "null quand actif (A), un timestamp (un entier) quand fermé (F)"
+              }
+            }
+          }
+        }, {
+          "gateway_error": {
+            "content": false
+          }
+        }]
+      },
+      "availability": {
+        "status": "OK",
+        "volumetrics": "limitation API Entreprise  (2000 requêtes/10minutes/IP)",
+        "usual_availability": "24h/24 et 7j/7",
+        "unavailability_types": "régulières, courtes, nocturnes",
+        "last_month_unavailabilities": "15 minutes"
+      }
+    },
+    {
+      "name": "Données de référence d’un établissement",
+      "scope": [
+        "entreprises",
+        "associations"
+      ],
+      "reference": "etablissements",
+      "description": "<description>",
+      "usecases": [
+        "Aides publiques",
+        "Applications de la loi énergie – Art.64",
+        "Marchés publics",
+        "Répertoire de tiers"
+      ],
+      "access": "Restreint par Signup",
+      "providers": [
+        "insee",
+        "infogreffe"
+      ],
+      "new": "Vous pouvez accéder aux entreprises non diffusées en ajoutant le paramètre <code class=\"tpl-code\">non_diffusables: true</code>. Un nouveau champ apparaît dans la réponse, sous la forme : <code class=\"tpl-code\">diffusable_commercialement</code>.",
+      "perimeter": [
+        {
+          "label": "Entreprises",
+          "description": "Inter has ruinarum varietates a Nisibi quam tuebatur accitus Vrsicinus, cui nos obsecuturos iunxerat imperiale praeceptum, dispicere litis exitialis certamina cogebatur abnuens et reclamans, adulatorum oblatrantibus turmis, bellicosus sane"
+        },
+        {
+          "label": "Certaines associations",
+          "description": "milesque semper et militum ductor sed forensibus iurgiis longe discretus, qui metu sui discriminis anxius cum accusatores quaesitoresque subditivos sibi consociatos ex isdem foveis cerneret emergentes"
+        },
+        {
+          "label": "Certaines personnes physiques inscrites au répertoire Sirène",
+          "description": "quae clam palamve agitabantur, occultis Constantium litteris edocebat inplorans subsidia, quorum metu tumor notissimus Caesaris exhalaret."
+        }
+      ],
+      "request": {
+        "variable": "Le siren de la personne physique ou morale recherchée",
+        "baseURL": "https://entreprise.api.gouv.fr/v2 ",
+        "parameters": [
+          {
+            "name": "/etablissements/",
+            "param": "SirenDeL’Entreprise "
+          },
+          {
+            "name": "?token=",
+            "param": "JetonD’Habilitation* "
+          },
+          {
+            "name": "&context=",
+            "param": "CadreDeLaRequête"
+          },
+          {
+            "name": "&recipient=",
+            "param": "BénéficaireDeL’Appel"
+          },
+          {
+            "name": "&object=",
+            "param": "RaisonDeL’AppelOuIdentifiant"
+          }
+        ],
+        "options": [
+          {
+            "label": "pour accéder aux entreprises non diffusibles.",
+            "description": "Si vous souhaitez accéder aux enteprises non diffusibles :",
+            "name": "&non_diffusable=",
+            "param": true
+          }
+        ]
+      },
+      "response": {
+        "format": "Données structurées JSON",
+        "timeout": "5 secondes",
+        "data": [{
+          "etablissement": {
+            "siege_social": {
+              "content": true
+            },
+            "siret": {
+              "content": "41816609600051"
+            },
+            "naf": {
+              "content": "6202A"
+            },
+            "libelle_naf": {
+              "content": "Conseil en systèmes et logiciels informatiques"
+            },
+            "date_mise_a_jour": {
+              "content": 1449183600
+            },
+            "tranche_effectif_salarie_entreprise": {
+              "de": {
+                "content": "200"
+              },
+              "a": {
+                "content": "249"
+              },
+              "code": {
+                "content": "31"
+              },
+              "date_reference": {
+                "content": "2014"
+              },
+              "intitule": {
+                "content": "200 à 249 salariés",
+                "comment": "ces derniers champs correspondent à la nomenclature INSEE"
+              }
+            },
+            "date_creation_etablissement": {
+              "content": 1108594800
+            },
+            "enseigne": {
+              "content": "null"
+            },
+            "region_implantation": {
+              "code": {
+                "content": "11"
+              },
+              "value": {
+                "content": "Île-de-France"
+              }
+            },
+            "commune_implantation": {
+              "code": {
+                "content": "75108"
+              },
+              "value": {
+                "content": "PARIS 8"
+              }
+            },
+            "pays_implantation": {
+              "code": {
+                "content": "null"
+              },
+              "value": {
+                "content": "null"
+              }
+            },
+            "diffusable_commercialement": {
+              "content": "null"
+            },
+            "adresse": {
+              "l1": {
+                "content": "OCTO TECHNOLOGY"
+              },
+              "l2": {
+                "content": "null"
+              },
+              "l3": {
+                "content": "null"
+              },
+              "l4": {
+                "content": "50 AVENUE DES CHAMPS ELYSEES"
+              },
+              "l5": {
+                "content": "null"
+              },
+              "l6": {
+                "content": "75008 PARIS"
+              },
+              "l7": {
+                "content": "FRANCE"
+              },
+              "numero_voie": {
+                "content": "50"
+              },
+              "type_voie": {
+                "content": "AV"
+              },
+              "nom_voie": {
+                "content": "DES CHAMPS ELYSEES"
+              },
+              "complement_adresse": {
+                "content": "null"
+              },
+              "code_postal": {
+                "content": "75008"
+              },
+              "localite": {
+                "content": "PARIS 8"
+              },
+              "code_insee_localite": {
+                "content": "75108"
+              },
+              "cedex": {
+                "content": "null"
+              }
+            },
+            "etat_administratif": {
+              "value": {
+                "content": "F",
+                "comment": "A (actif) ou F (fermé)"
+              },
+              "date_fermeture": {
+                "content": 1315173600,
+                "comment": "null quand actif (A), un timestamp (un entier) quand fermé (F)"
+              }
+            }
+          }
+        }, {
+          "gateway_error": {
+            "content": false
+          }
+        }]
+      },
+      "availability": {
+        "status": "OK",
+        "volumetrics": "limitation API Entreprise  (2000 requêtes/10minutes/IP)",
+        "usual_availability": "24h/24 et 7j/7",
+        "unavailability_types": "régulières, courtes, nocturnes",
+        "last_month_unavailabilities": "15 minutes"
+      }
+    },
+    {
+      "name": "Extrait RCS",
+      "scope": [
+        "entreprises",
+        "associations"
+      ],
+      "reference": "etablissements",
+      "description": "<description>",
+      "usecases": [
+        "Aides publiques",
+        "Applications de la loi énergie – Art.64",
+        "Marchés publics",
+        "Répertoire de tiers"
+      ],
+      "access": "Restreint par Signup",
+      "providers": [
+        "insee",
+        "infogreffe"
+      ],
+      "new": "Vous pouvez accéder aux entreprises non diffusées en ajoutant le paramètre <code class=\"tpl-code\">non_diffusables: true</code>. Un nouveau champ apparaît dans la réponse, sous la forme : <code class=\"tpl-code\">diffusable_commercialement</code>.",
+      "perimeter": [
+        {
+          "label": "Entreprises",
+          "description": "Inter has ruinarum varietates a Nisibi quam tuebatur accitus Vrsicinus, cui nos obsecuturos iunxerat imperiale praeceptum, dispicere litis exitialis certamina cogebatur abnuens et reclamans, adulatorum oblatrantibus turmis, bellicosus sane"
+        },
+        {
+          "label": "Certaines associations",
+          "description": "milesque semper et militum ductor sed forensibus iurgiis longe discretus, qui metu sui discriminis anxius cum accusatores quaesitoresque subditivos sibi consociatos ex isdem foveis cerneret emergentes"
+        },
+        {
+          "label": "Certaines personnes physiques inscrites au répertoire Sirène",
+          "description": "quae clam palamve agitabantur, occultis Constantium litteris edocebat inplorans subsidia, quorum metu tumor notissimus Caesaris exhalaret."
+        }
+      ],
+      "request": {
+        "variable": "Le siren de la personne physique ou morale recherchée",
+        "baseURL": "https://entreprise.api.gouv.fr/v2 ",
+        "parameters": [
+          {
+            "name": "/extraits_rcs_infogreffe/",
+            "param": "SirenDeL’Entreprise "
+          },
+          {
+            "name": "?token=",
+            "param": "JetonD’Habilitation* "
+          },
+          {
+            "name": "&context=",
+            "param": "CadreDeLaRequête"
+          },
+          {
+            "name": "&recipient=",
+            "param": "BénéficaireDeL’Appel"
+          },
+          {
+            "name": "&object=",
+            "param": "RaisonDeL’AppelOuIdentifiant"
+          }
+        ]
+      },
+      "response": {
+        "format": "Données structurées JSON",
+        "timeout": "5 secondes",
+        "data": [{
+          "siren": {
+            "content": "418166096",
+            "comment": "pouet"
+          },
+          "date_immatriculation": {
+            "content": "1998-03-27"
+          },
+          "date_immatriculation_timestamp": {
+            "content": 890953200
+          },
+          "date_extrait": {
+            "content": "21 AVRIL 2017"
+          },
+          "observations": [
+            {
+              "date": {
+                "content": "2000-02-23"
+              },
+              "date_timestamp": {
+                "content": 951260400
+              },
+              "numero": {
+                "content": "12197"
+              },
+              "libelle": {
+                "content": "LA SOCIETE NE CONSERVE AUCUNE ACTIVITE A SON ANCIEN SIEGE"
+              }
+            },
+            {
+              "date": {
+                "content": "2017-07-19"
+              },
+              "date_timestamp": {
+                "content": 951260400
+              },
+              "numero": {
+                "content": "14127"
+              },
+              "libelle": {
+                "content": "AUGMENTATION DE CAPITAL"
+              }
+            }
+          ]
+        }]
+      },
+      "availability": {
+        "status": "OK",
+        "volumetrics": "limitation API Entreprise  (2000 requêtes/10minutes/IP)",
+        "usual_availability": "24h/24 et 7j/7",
+        "unavailability_types": "régulières, courtes, nocturnes",
+        "last_month_unavailabilities": "15 minutes"
+      }
+    },
+    {
+      "name": "Exercices",
+      "scope": [
+        "entreprises",
+        "associations"
+      ],
+      "reference": "etablissements",
+      "description": "<description>",
+      "usecases": [
+        "Aides publiques",
+        "Applications de la loi énergie – Art.64",
+        "Marchés publics",
+        "Répertoire de tiers"
+      ],
+      "access": "Restreint par Signup",
+      "providers": [
+        "insee",
+        "infogreffe"
+      ],
+      "new": "Vous pouvez accéder aux entreprises non diffusées en ajoutant le paramètre <code class=\"tpl-code\">non_diffusables: true</code>. Un nouveau champ apparaît dans la réponse, sous la forme : <code class=\"tpl-code\">diffusable_commercialement</code>.",
+      "perimeter": [
+        {
+          "label": "Entreprises",
+          "description": "Inter has ruinarum varietates a Nisibi quam tuebatur accitus Vrsicinus, cui nos obsecuturos iunxerat imperiale praeceptum, dispicere litis exitialis certamina cogebatur abnuens et reclamans, adulatorum oblatrantibus turmis, bellicosus sane"
+        },
+        {
+          "label": "Certaines associations",
+          "description": "milesque semper et militum ductor sed forensibus iurgiis longe discretus, qui metu sui discriminis anxius cum accusatores quaesitoresque subditivos sibi consociatos ex isdem foveis cerneret emergentes"
+        },
+        {
+          "label": "Certaines personnes physiques inscrites au répertoire Sirène",
+          "description": "quae clam palamve agitabantur, occultis Constantium litteris edocebat inplorans subsidia, quorum metu tumor notissimus Caesaris exhalaret."
+        }
+      ],
+      "request": {
+        "variable": "Le siren de la personne physique ou morale recherchée",
+        "baseURL": "https://entreprise.api.gouv.fr/v2 ",
+        "parameters": [
+          {
+            "name": "/extraits_rcs_infogreffe/",
+            "param": "SirenDeL’Entreprise "
+          },
+          {
+            "name": "?token=",
+            "param": "JetonD’Habilitation* "
+          },
+          {
+            "name": "&context=",
+            "param": "CadreDeLaRequête"
+          },
+          {
+            "name": "&recipient=",
+            "param": "BénéficaireDeL’Appel"
+          },
+          {
+            "name": "&object=",
+            "param": "RaisonDeL’AppelOuIdentifiant"
+          }
+        ]
+      },
+      "response": {
+        "format": "Données structurées JSON",
+        "timeout": "5 secondes",
+        "data": [{
+          "exercices": [{
+            "ca": {
+              "content": "648374448",
+              "comment": "pouet"
+            },
+            "date_fin_exercice": {
+              "content": "2016-12-31T00:00:00+01:00"
+            },
+            "date_fin_exercice_timestamp": {
+              "content": 1483138800
+            }
+          },
+          {
+            "ca": {
+              "content": "491463386"
+            },
+            "date_fin_exercice": {
+              "content": "2015-12-31T00:00:00+01:00"
+            },
+            "date_fin_exercice_timestamp": {
+              "content": 1451516400
+            }
+          },
+          {
+            "ca": {
+              "content": "1451516400"
+            },
+            "date_fin_exercice": {
+              "content": "2014-12-31T00:00:00+01:00"
+            },
+            "date_fin_exercice_timestamp": {
+              "content": 1419980400
+            }
+          }]
+        }]
+      },
+      "availability": {
+        "status": "OK",
+        "volumetrics": "limitation API Entreprise  (2000 requêtes/10minutes/IP)",
+        "usual_availability": "24h/24 et 7j/7",
+        "unavailability_types": "régulières, courtes, nocturnes",
+        "last_month_unavailabilities": "15 minutes"
+      }
+    }
+  ]
+}

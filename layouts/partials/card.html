@@ -1,0 +1,204 @@
+{{ $content := . }}
+{{ range $card, $cardElement := .endpoint }}
+<div class="tpl-panel documentation-card">
+  <div class="documentation-card__header">
+    <div class="endpoint-scope">
+      {{ range .scope }}
+        {{ if eq . "entreprises" }}
+          <div class="endpoint-scope__item tpl-bg--info" title="entreprises">
+            <svg class="tpl-icon" viewBox="0 0 24 24"><use xlink:href="#box"></use></svg>
+          </div>
+        {{ else if eq . "associations" }}
+          <div class="endpoint-scope__item tpl-bg--warning" title="associations">
+            <svg class="tpl-icon" viewBox="0 0 24 24"><use xlink:href="#home"></use></svg>
+          </div>
+        {{ else }}
+          <div class="endpoint-scope__item tpl-bg--success" title="{{ . }}">
+            <svg class="tpl-icon" viewBox="0 0 24 24"><use xlink:href="#note"></use></svg>
+          </div>
+        {{ end }}
+      {{ end }}
+    </div>
+    <h3>{{ .name }} <code class="tpl-code">{{ .reference }}</code></h3>
+    <p>{{ .description }}</p>
+    <div class="tpl-flex-row tpl-flex-jc-sb description">
+      <dl class="tpl-description-list">
+        <dt>Cas d’usage</dt>
+        <dd>
+          {{ if .usecases }}
+          <ul>
+            {{ range .usecases }}
+              <li>{{ . }}</li>
+            {{ end }}
+          </ul>
+          {{ end }}
+        </dd>
+      </dl>
+      <dl class="tpl-description-list">
+        <dt>Périmètre</dt>
+        <dd>
+          {{ if .perimeter }}
+          <ul>
+            {{ range .perimeter }}
+              <li>{{ .label }}</li>
+            {{ end }}
+          </ul>
+          {{ end }}
+        </dd>
+        <dt>Accès</dt>
+        <dd>{{ .access }}<svg class="tpl-icon" viewBox="0 0 24 24"><use xlink:href="#lock"></use></svg></dd>
+      </dl>
+      <div class="providers">
+        {{ if isset .providers -1 }}
+          {{ range .providers }}
+            <img src="img/providers/{{ . }}.png" alt="{{ . }}" />
+          {{ end }}
+        {{ end }}
+      </div>
+    </div>
+  </div>
+  <div class="documentation__tabs">
+    <ul class="tab-list">
+      <li>
+        <a href="#{{ $card }}-technical-documentation" class="tab">
+          <svg class="tpl-icon" viewBox="0 0 24 24"><use xlink:href="#list"></use></svg>
+          Documentation
+        </a>
+      </li>
+      <li>
+        <a href="#{{ $card }}-availability" class="tab">
+          <svg class="tpl-icon" viewBox="0 0 24 24"><use xlink:href="#bar-chart"></use></svg>
+          Disponibilité
+        </a>
+      </li>
+    </ul>
+    <div id="{{ $card }}-technical-documentation" class="technical-documentation tab-content tpl-bg--gradient-light">
+      {{ if .new }}
+      <div class="new">
+        <h4>
+          <svg class="tpl-icon" viewBox="0 0 24 24"><use xlink:href="#gift"></use></svg>
+          Nouvelle option disponible
+        </h4>
+        <p>{{ .new | safeHTML }}</p>
+      </div>
+      <hr />
+      {{ end }}
+      {{ if .perimeter }}
+      <details>
+        <summary>
+          <h4>Périmètre</h4>
+        </summary>
+        <dl class="tpl-description-list">
+          {{ range .perimeter }}
+          <dt>{{ .label }}</dt>
+          <dd>{{ .description }}</dt>
+          {{ end }}
+        </dl>
+      </details>
+      <hr />
+      {{ end }}
+      <div class="columns tpl-flex-row">
+        <div class="request">
+          <h4><svg class="tpl-icon" viewBox="0 0 24 24"><use xlink:href="#call-phone"></use></svg>Votre appel</h4>
+          <dl class="tpl-description-list">
+            <dt>Variable d’interrogation</dt>
+            <dd>{{ .request.variable }}</dd>
+            {{ if .request.options }}
+            <dt>Options d’appel à ajouter (voir requête HTTP ⬇️): </dt>
+            <dd>
+              <ul>
+                {{ range .request.options }}
+                <li>{{ .description }}</li>
+                {{ end }}
+              </ul>
+            </dd>
+            {{ end }}
+          </dl>
+          <details>
+            <summary>Numéro Siren ?</summary>
+          </details>
+          <details>
+            <summary>État administratif d’une entreprise ?</summary>
+          </details>
+          <details>
+            <summary>Entreprise non-diffusible ?</summary>
+          </details>
+          {{ if .request }}
+            <div class="json-example">
+              <h5>Requête HTTP</h5>
+              <pre class="tpl-pre"><code class="tpl-code">
+                <div>
+                  <b>{{ .request.baseURL }}{{ range .request.parameters }}</b><b>{{ .name }} </b><{{ .param }}>{{ end }}{{ .end }}
+                </div>
+                {{ if .request.options }}
+                  {{ range .request.options }}
+                    <div class="comment">{{ .description }}</div>
+                    <div><b>{{ .name }}{{ .param }}</b></div>
+                  {{ end }}
+                {{ end }}
+              </code></pre>
+            </div>
+          {{ end }}
+        </div>
+        <div class="response">
+          <h4><svg class="tpl-icon" viewBox="0 0 24 24"><use xlink:href="#file-text"></use></svg> La réponse de l’API</h4>
+          <dl class="tpl-description-list">
+            <dt>Format</dt>
+            <dd>{{ .response.format }}</dd>
+            <dt>Timeout</dt>
+            <dd>{{ .response.timeout }}</dd>
+          </dl>
+          <p>La réponse est composée de trois ensembles :
+            <ul>
+              {{ range .response.data }}
+              <li><strong>{{ .label }}</strong>, {{ .description | safeHTML }}</li>
+              {{ end }}
+            </ul>
+          </p>
+          <div class="json-example">
+            <h5>Réponse JSON</h5>
+            {{ partial "response.html" . }}
+          </div>
+          <details>
+            <summary>Que signifie le code erreur 403 ?</summary>
+          </details>
+        </div>
+      </div>
+      <div class="documentation__content-footer">
+        <dl class="tpl-description-list">
+          <dt>Dernière mise à jour de la doc :</dt>
+          <dd>02/01/2020</dd>
+        </dl>
+      </div>
+    </div>
+    <div id="{{ $card }}-availability" class="availability tab-content tpl-bg--gradient-light">
+      {{ with .availability }}
+      <div class="tpl-flex-row tpl-flex-jc-sb">
+        <dl class="tpl-description-list">
+          <dt>Disponibilité actuelle</dt>
+          <dd class="availability-status {{ .status }}">{{ .status }}</dd>
+        </dl>
+        <dl class="tpl-description-list">
+          <dt>Volumétrie</dt>
+          <dd>{{ .volumetrics }}</dd>
+        </dl>
+      </div>
+      <dl class="tpl-description-list">
+        <dt>Disponibilité normale</dt>
+        <dd>{{ .usual_availability }}</dd>
+        <dt>Indisponibilités types</dt>
+        <dd>{{ .unavailability_types }}</dd>
+        <dt>Indisponibilités moyennes du dernier mois</dt>
+        <dd>{{ .last_month_unavailabilities }}</dd>
+      </dl>
+      {{ end }}
+      <hr />
+      <div class="metrics">
+        <select>
+          <option value="7">Les 7 derniers jours</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+{{ end }}

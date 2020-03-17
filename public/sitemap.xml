@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>https://doc.entreprise.api.gouv.fr/</loc>
+  </url>
+  
+  <url>
+    <loc>https://doc.entreprise.api.gouv.fr/catalogue/</loc>
+  </url>
+  
+  <url>
+    <loc>https://doc.entreprise.api.gouv.fr/test/</loc>
+  </url>
+  
+  <url>
+    <loc>https://doc.entreprise.api.gouv.fr/categories/</loc>
+  </url>
+  
+  <url>
+    <loc>https://doc.entreprise.api.gouv.fr/tags/</loc>
+  </url>
+  
+</urlset>

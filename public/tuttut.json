@@ -1,0 +1,268 @@
+{
+  "category": "Informations générales",
+  "data": [{
+    "name": "Données de référence",
+    "scope": ["entreprises", "associations"],
+    "reference": "entreprises",
+    "description": "Obtenir des informations concernant une personne physique ou morale du répertoire Sirene telles que les dates de création et de fin ; le code effectif, le numéro de TVA intercommunautaire ; la forme juridique... ou encore les mandataires sociaux et l’état administratif de l’entité concernée.",
+    "usecases": [
+      "Aides publiques",
+      "Applications de la loi énergie – Art.64",
+      "Marchés publics",
+      "Répertoire de tiers"
+    ],
+    "access": "Restreint par Signup",
+    "providers": [
+      "insee",
+      "infogreffe"
+    ],
+    "whatsnew": "Vous pouvez accéder aux entreprises non diffusées en ajoutant le paramètre <code class=\"tpl-code\">non_diffusables: true</code>. Un nouveau champ apparaît dans la réponse, sous la forme : <code class=\"tpl-code\">diffusable_commercialement</code>.",
+    "perimeter": [{
+        "label": "Entreprises",
+        "description": "Inter has ruinarum varietates a Nisibi quam tuebatur accitus Vrsicinus, cui nos obsecuturos iunxerat imperiale praeceptum, dispicere litis exitialis certamina cogebatur abnuens et reclamans, adulatorum oblatrantibus turmis, bellicosus sane"
+      }, {
+        "label": "Certaines associations",
+        "description": "milesque semper et militum ductor sed forensibus iurgiis longe discretus, qui metu sui discriminis anxius cum accusatores quaesitoresque subditivos sibi consociatos ex isdem foveis cerneret emergentes"
+      }, {
+        "label": "Certaines personnes physiques inscrites au répertoire Sirène",
+        "description": "quae clam palamve agitabantur, occultis Constantium litteris edocebat inplorans subsidia, quorum metu tumor notissimus Caesaris exhalaret."
+      }
+    ],
+    "request": {
+      "variable": "Le siren de la personne physique ou morale recherchée",
+      "baseURL": "https://entreprise.api.gouv.fr/v2 ",
+      "parameters": [{
+          "name": "/entreprises/",
+          "param": "SirenDeL’Entreprise "
+        }, {
+          "name": "?token=",
+          "param": "JetonD’Habilitation* "
+        }, {
+          "name": "&context=",
+          "param": "CadreDeLaRequête"
+        }, {
+          "name": "&recipient=",
+          "param": "BénéficaireDeL’Appel"
+        }, {
+          "name": "&object=",
+          "param": "RaisonDeL’AppelOuIdentifiant"
+        }],
+      "options": [{
+          "label": "pour connaître l’état administratif de l’entité demandée ;",
+          "description": "Si vous souhaitez également connaître l’état administratif de l’entreprise, ajoutez le paramètre facultatif suivant :",
+          "name": "&with_etat_administratif=",
+          "param": true
+        }, {
+          "label": "pour accéder aux entreprises non diffusibles.",
+          "description": "Si vous souhaitez accéder aux enteprises non diffusibles :",
+          "name": "&non_diffusable=",
+          "param": true
+        }
+      ]
+    },
+    "response": {
+      "format": "Données structurées JSON",
+      "timeout": "5 secondes",
+      "data": [{
+          "key": "entreprise",
+          "label": "entreprise",
+          "description": "qui contient les données générales, les mandataires sociaux et l’état administratif de la personne physique ou morale ;",
+          "fields": {
+            "siren": {
+              "value": "000000000"
+            },
+            "capital_social": {
+              "value": "00000"
+            },
+            "numero_tva_intracommunautaire": {
+              "value": "FR00000",
+              "comment": "Également appelé numéro d’identification fiscale NIF. Ce numéro est calculé par API Entreprise selon la règle officielle, cette donnée est donc théorique. Dans le cas où l’établissement siège est à l’étranger, la valeur renvoit <b>null</b>. En effet dans ce cas le numéro de TVA est problablement calculé par le pays où se situe l'établissement siège et non par la France. La seule source fiable est alors l'entreprise elle-même."
+            },
+            "forme_juridique": {
+              "value": "Forme juridique"
+            },
+            "forme_juridique_code": {
+              "value": "0000",
+              "comment": "Ces deux champs sont issus de la nomenclature des catégories juridiques de l’INSEE"
+            },
+            "nom_commercial": {
+              "value": "Mon entreprise"
+            },
+            "procedure_collective": {
+              "value": "toujours false",
+              "comment": "À ignorer, et ce champ sera bientôt supprimé."
+            },
+            "enseigne": {
+              "value": "null ou quelque chose ?"
+            },
+            "naf_entreprise": {
+              "value": "6202A"
+            },
+            "libelle_naf_entreprise": {
+              "value": "Conseil en systèmes et logiciels informatiques",
+              "comment": "issu de la nomenclature d’activités française de l’INSEE."
+            },
+            "raison_sociale": {
+              "value": "mon entreprise"
+            },
+            "siret_siege_social": {
+              "value": "00000000000000"
+            },
+            "code_effectif_entreprise": {
+              "value": "31"
+            },
+            "date_creation": {
+              "value": "000000000",
+              "comment": "date au format timestamp UNIX"
+            },
+            "nom": {
+              "value": "null ou quelque chose ?"
+            },
+            "prenom": {
+              "value": "null ou quelque chose ?"
+            },
+            "date_radiation": {
+              "value": "000000000",
+              "comment": "indique null si l’entreprise  n’est pas radiée du registre / Dans le cas contraire, la date est fournie au format timestamp UNIX"
+            },
+            "categorie_entreprise": {
+              "value": "PME ou TPE ou ETI"
+            },
+            "tranche_effectif_salarie_entreprise": {
+              "de": {
+                "value": "200"
+              },
+              "a": {
+                "value": "249"
+              },
+              "code": {
+                "value": "31"
+              },
+              "date_reference": {
+                "value": "2014"
+              },
+              "intitule": {
+                "value": "200 à 249 salariés",
+                "comment": "ces derniers champs correspondent à la nomenclature INSEE"
+              }
+            },
+            "mandataires_sociaux": [{
+              "nom": {
+        				"value": "Henri"
+              },
+      				"prenom": {
+                "value": "Martin"
+              },
+      				"fonction": {
+                "value": "Président du Directoire"
+              },
+      				"dirigeant": {
+                "value": "toujours true"
+              },
+      				"date_naissance": {
+                "value": "1965-01-27"
+              },
+      				"date_naissance_timestamp": {
+                "value": "-155523600"
+              },
+      				"raison_sociale": {
+                "value": ""
+              },
+      				"identifiant": {
+                "value": ""
+              },
+      				"type": {
+                "value": "PP"
+              }
+          	}, {
+      				"nom": {
+                "value": ""
+              },
+      				"prenom": {
+                "value": ""
+              },
+      				"fonction": {
+                "value": "COMMISSAIRE AUX COMPTES SUPPLEANT"
+              },
+      				"dirigeant": {
+                "value": true
+              },
+      				"date_naissance": {
+                "value": ""
+              },
+      				"date_naissance_timestamp": {
+                "value": 0
+              },
+      				"raison_sociale": {
+                "value": "BCRH & ASSOCIES - SOCIETE A RESPONSABILITE LIMITEE A ASSOCIE UNIQUE"
+              },
+      				"identifiant": {
+                "value": "490092574"
+              },
+      				"type": {
+                "value": "PM"
+              }
+      			}]
+          }
+        }, {
+          "key": "etablissement_siege",
+          "label": "établissement siège",
+          "description": "qui contient les données du siège, celles-ci étant disponibles également par l’<em>endpoint</em> <code class=\"tpl-code\">etablissements</code> ;",
+          "fields": {
+            "capital_social": {
+              "value": "00000"
+            },
+            "numero_tva_intracommunautaire": {
+              "value": "FR00000",
+              "comment": "Également appelé numéro d’identification fiscale NIF. Ce numéro est calculé par API Entreprise selon la règle officielle, cette donnée est donc théorique. Dans le cas où l’établissement siège est à l’étranger, la valeur renvoit <b>null</b>. En effet dans ce cas le numéro de TVA est problablement calculé par le pays où se situe l'établissement siège et non par la France. La seule source fiable est alors l'entreprise elle-même."
+            },
+            "forme_juridique": {
+              "value": "Forme juridique"
+            },
+            "forme_juridique_code": {
+              "value": "0000",
+              "comment": "Ces deux champs sont issus de la nomenclature des catégories juridiques de l’INSEE"
+            },
+            "nom_commercial": {
+              "value": "Mon entreprise"
+            },
+            "procedure_collective": {
+              "value": "toujours false",
+              "comment": "À ignorer, et ce champ sera bientôt supprimé."
+            },
+            "enseigne": {
+              "value": "null ou quelque chose ?"
+            },
+            "naf_entreprise": {
+              "value": "6202A"
+            },
+            "libelle_naf_entreprise": {
+              "value": "Conseil en systèmes et logiciels informatiques",
+              "comment": "issu de la nomenclature d’activités française de l’INSEE."
+            },
+            "raison_sociale": {
+              "value": "mon entreprise"
+            },
+            "siret_siege_social": {
+              "value": "00000000000000"
+            },
+            "code_effectif_entreprise": {
+              "value": "31"
+            }
+          }
+        }, {
+          "key": "gateway_error",
+          "label": "gateway error",
+          "description": "indiquant si un fournisseur de données n’a pas fonctionné.",
+          "value": "false"
+        }]
+    },
+    "availability": {
+      "status": "OK",
+      "volumetrics": "limitation API Entreprise (2000 requêtes/10minutes/IP)",
+      "usual_availability": "24h/24 et 7j/7",
+      "unavailability_types": "régulières, courtes, nocturnes",
+      "last_month_unavailabilities": "15 minutes"
+    }
+  }]
+}

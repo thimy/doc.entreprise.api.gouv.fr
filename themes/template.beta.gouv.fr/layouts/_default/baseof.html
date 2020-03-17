@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html itemscore="" itemtype="http://schema.org/WebPage" lang="fr">
+  {{- partial "head.html" . -}}
+  <body class="tpl-body">
+    {{ partial "icons.html" }}
+    {{- partial "header.html" . -}}
+    <main class="tpl-main" role="main">
+      {{- block "main" . }}{{- end }}
+    </main>
+    {{- partial "footer.html" . -}}
+    {{ if .Params.js }}
+      <script src="{{ $.Site.BaseURL }}{{ .Params.js }}"></script>
+    {{ end }}
+  </body>
+</html>

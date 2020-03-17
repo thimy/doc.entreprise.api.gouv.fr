@@ -1,0 +1,12 @@
+{{ if .Params.Hero }}
+  <section class="tpl-hero {{ .Params.Heroclass }}">
+    <div class="tpl-container">
+      {{ with .Title }}<h1 class="tpl-hero__title">{{ . }}</h1> {{ end }}
+      <form class="tpl-hero__form">
+        <label for="tpl-hero__search">Chercher une information</label>
+        <input id="tpl-hero__search" type="text" class="tpl-hero__search">
+        <input type="submit" class="tpl-hero__search-button" value="" role="button" aria-label="Chercher une information">
+      </form>
+    </div>
+  </section>
+{{ end }}
